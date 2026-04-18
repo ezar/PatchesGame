@@ -24,7 +24,10 @@
   </div>
   <div class="puzzle-meta" id="puzzle-meta">
     <strong id="puzzle-name">Loading...</strong>
-    <span id="puzzle-num"></span>
+    <div class="meta-row">
+      <span id="puzzle-num"></span>
+      <span id="timer" class="timer">0:00</span>
+    </div>
     <a href="/help.html" style="font-size:11px;color:var(--muted);text-decoration:none;font-family:'DM Mono',monospace;margin-top:2px;display:block;">How to play ↗</a>
   </div>
 </header>
@@ -89,8 +92,12 @@
     <div class="win-title">Solved!</div>
     <div class="win-sub" id="win-sub">Puzzle complete</div>
     <div class="win-actions">
-      <button id="btn-close-win" class="btn">Keep looking</button>
+      <button id="btn-share" class="btn">📤 Share</button>
       <button id="btn-next" class="btn btn-primary">Next puzzle →</button>
+    </div>
+    <div class="win-secondary">
+      <button id="btn-close-win" class="btn-text">Keep looking</button>
+      <button id="btn-bell" class="btn-bell">🔕 Daily reminder</button>
     </div>
   </div>
 </div>

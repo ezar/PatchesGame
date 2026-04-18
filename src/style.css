@@ -77,6 +77,23 @@ header {
   font-size: 14px;
 }
 
+.meta-row {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.timer {
+  font-family: 'DM Mono', monospace;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text);
+  letter-spacing: 0.5px;
+  min-width: 36px;
+  text-align: right;
+}
+
 /* Puzzle selector */
 .puzzle-nav {
   display: flex;
@@ -374,7 +391,46 @@ details[open] .rules-title {
 .win-title { font-size: 28px; font-weight: 800; margin-bottom: 8px; }
 .win-sub { color: var(--muted); font-family: 'DM Mono', monospace; font-size: 13px; margin-bottom: 24px; }
 
-.win-actions { display: flex; gap: 10px; justify-content: center; }
+.win-actions { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+
+.win-secondary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 8px;
+}
+
+.btn-text {
+  background: none;
+  border: none;
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  color: var(--muted);
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 8px;
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  transition: all 0.15s;
+}
+.btn-text:hover { color: var(--text); text-decoration-color: var(--text); }
+
+/* Daily reminder bell button */
+.btn-bell {
+  margin-top: 4px;
+  background: none;
+  border: none;
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  color: var(--muted);
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 8px;
+  transition: color 0.15s;
+}
+.btn-bell:hover { color: var(--text); }
+.btn-bell.bell-on { color: var(--text); font-weight: 600; }
 
 /* Drag overlay — single div over the board, no per-cell updates during drag */
 .drag-overlay {

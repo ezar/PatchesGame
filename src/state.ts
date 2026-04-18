@@ -14,6 +14,7 @@ interface GameState {
   dragOrigin: DragStart | null;
   history: Grid[];
   startTime: number;
+  hintsUsed: number;
 }
 
 export const state: GameState = {
@@ -25,4 +26,5 @@ export const state: GameState = {
   dragOrigin: null,
   history: [],
   startTime: 0,
+  hintsUsed: 0,
 };

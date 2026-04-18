@@ -13,6 +13,10 @@ import {
   buildNav,
   getCell,
 } from './render';
+import { startTimer, stopTimer, getElapsedStr } from './timer';
+import { haptic } from './haptic';
+import { markPlayed } from './notifications';
+import { shareResult } from './share';
 
 export { getPuzzle };
 
@@ -53,6 +57,7 @@ export function loadPuzzle(idx: number): void {
   state.cols = p.cols;
   state.history = [];
   state.startTime = Date.now();
+  state.hintsUsed = 0;
   state.isDragging = false;
   state.dragOrigin = null;
 
@@ -76,6 +81,7 @@ export function loadPuzzle(idx: number): void {
   buildNav(idx, loadPuzzle);
   setStatus('Drag to paint regions on the grid');
   renderBoard();
+  startTimer(state.startTime);
 }
 
 export function resetPuzzle(): void {
@@ -107,13 +113,13 @@ export function commitDrag(): void {
     return;
   }
   if (seed.type === 'square' && h !== w) {
-    setStatus('❌ Must be a square', 'error'); return;
+    haptic.error(); setStatus('❌ Must be a square', 'error'); return;
   }
   if (seed.type === 'tall' && h <= w) {
-    setStatus('❌ Must be taller than wide', 'error'); return;
+    haptic.error(); setStatus('❌ Must be taller than wide', 'error'); return;
   }
   if (seed.type === 'wide' && w <= h) {
-    setStatus('❌ Must be wider than tall', 'error'); return;
+    haptic.error(); setStatus('❌ Must be wider than tall', 'error'); return;
   }
 
   saveHistory();
@@ -132,6 +138,7 @@ export function commitDrag(): void {
         state.grid[r][c] = colorIdx;
     }
 
+  haptic.light();
   drawRegionBorders();
   saveGrid(state.currentPuzzle, state.grid);
   drawCenterNumbers();
@@ -263,21 +270,30 @@ function validateSolution(): string | null {
 }
 
 function triggerWin(): void {
-  const p = getPuzzle(state.currentPuzzle);
-  const elapsed = Math.round((Date.now() - state.startTime) / 1000);
-  const mins = Math.floor(elapsed / 60);
-  const secs = elapsed % 60;
-  const timeStr = mins > 0 ? `${mins}m ${secs}s` : `${secs}s`;
+  stopTimer();
+  const p  = getPuzzle(state.currentPuzzle);
+  const timeStr = getElapsedStr(state.startTime);
   document.getElementById('win-sub')!.textContent = `Solved in ${timeStr} · ${p.name}`;
   document.getElementById('win-overlay')!.classList.add('show');
   playWinSound();
   launchConfetti();
+  haptic.win();
+  markPlayed();
+
+  // Wire share button with current result
+  const btnShare = document.getElementById('btn-share');
+  if (btnShare) {
+    btnShare.onclick = () => shareResult(state.currentPuzzle, timeStr, state.hintsUsed);
+  }
 }
+
+export { shareResult };
 
 export function checkSolution(): void {
   const err = validateSolution();
   if (!err) { triggerWin(); return; }
 
+  haptic.error();
   if (err === 'empty') { setStatus('❌ Some cells are still empty', 'error'); return; }
   const [type, ciStr] = err.split(':');
   const ci = Number(ciStr);
@@ -308,6 +324,7 @@ export function getHint(): void {
         renderBoard();
         const cell = getCell(r, c);
         if (cell) cell.classList.add('hint-flash');
+        state.hintsUsed++;
         setStatus('💡 Hint applied — one cell revealed');
         return;
       }
