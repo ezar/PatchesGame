@@ -33,7 +33,7 @@ export function buildNav(currentLevel: number, onSelect: (level: number) => void
   const nav = document.getElementById('puzzle-nav')!;
   nav.innerHTML = '';
 
-  const WINDOW = 3;
+  const WINDOW = 1;
   const start = Math.max(0, currentLevel - WINDOW);
   const end = currentLevel + WINDOW;
 
