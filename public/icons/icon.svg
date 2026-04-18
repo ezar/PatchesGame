@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" rx="96" fill="#1a1612"/>
+  <!-- Top-left patch (orange) -->
+  <rect x="56" y="56" width="180" height="180" rx="18" fill="#e8622a"/>
+  <!-- Top-right patch (blue) -->
+  <rect x="276" y="56" width="180" height="80" rx="18" fill="#2e7d9e"/>
+  <!-- Mid-right patch (teal) -->
+  <rect x="276" y="176" width="80" height="60" rx="14" fill="#2d7a4f"/>
+  <!-- Far-right tall patch (purple) -->
+  <rect x="396" y="176" width="60" height="180" rx="14" fill="#7c5cbf"/>
+  <!-- Bottom-left patch (red) -->
+  <rect x="56" y="276" width="80" height="180" rx="18" fill="#c94054"/>
+  <!-- Bottom-center patch (gold) -->
+  <rect x="176" y="276" width="180" height="80" rx="18" fill="#b8943c"/>
+  <!-- Small patch (teal) -->
+  <rect x="176" y="396" width="80" height="60" rx="14" fill="#2d7a4f"/>
+  <!-- Bottom patch (blue) -->
+  <rect x="276" y="396" width="80" height="60" rx="14" fill="#2e7d9e"/>
+</svg>

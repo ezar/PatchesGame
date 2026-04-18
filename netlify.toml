@@ -1,0 +1,14 @@
+[build]
+  command   = "npm run build"
+  publish   = "dist"
+
+# Service Worker needs these headers to work correctly as a PWA
+[[headers]]
+  for = "/sw.js"
+  [headers.values]
+    Cache-Control = "no-cache"
+
+[[headers]]
+  for = "/workbox-*.js"
+  [headers.values]
+    Cache-Control = "no-cache"

@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#1a1612">
+  <meta name="description" content="How to play Patches — rules, shape types, tips and strategy for the grid puzzle game.">
+  <title>How to Play · Patches</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f5f0e8;
+      --surface: #ffffff;
+      --border: #d8d0c4;
+      --text: #1a1612;
+      --muted: #8a8278;
+      --c1: #e8622a;
+      --c2: #2e7d9e;
+      --c3: #c94054;
+      --c4: #7c5cbf;
+      --c5: #2d7a4f;
+      --c6: #b8943c;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Syne', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 24px 16px 64px;
+    }
+
+    /* ── Header ── */
+    header {
+      width: 100%;
+      max-width: 600px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 32px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .logo-icon {
+      width: 36px; height: 36px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3px;
+    }
+    .logo-icon span { border-radius: 3px; }
+    .logo-icon span:nth-child(1) { background: var(--c1); }
+    .logo-icon span:nth-child(2) { background: var(--c2); }
+    .logo-icon span:nth-child(3) { background: var(--c4); }
+    .logo-icon span:nth-child(4) { background: var(--c5); }
+
+    .logo-text { font-size: 22px; font-weight: 800; letter-spacing: -0.5px; }
+
+    .play-link {
+      font-family: 'DM Mono', monospace;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text);
+      text-decoration: none;
+      border: 1.5px solid var(--border);
+      border-radius: 20px;
+      padding: 7px 16px;
+      transition: all 0.15s;
+    }
+    .play-link:hover { border-color: var(--text); background: var(--text); color: var(--bg); }
+
+    /* ── Disclaimer ── */
+    .disclaimer {
+      width: 100%;
+      max-width: 600px;
+      background: #fff8e8;
+      border: 1.5px solid #e8d08c;
+      border-radius: 12px;
+      padding: 12px 16px;
+      margin-bottom: 28px;
+      font-family: 'DM Mono', monospace;
+      font-size: 12px;
+      color: #7a6520;
+      line-height: 1.5;
+    }
+    .disclaimer strong { display: block; margin-bottom: 2px; font-size: 11px; letter-spacing: 1px; text-transform: uppercase; }
+
+    /* ── Content ── */
+    .content {
+      width: 100%;
+      max-width: 600px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+    }
+
+    .section-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 12px;
+      font-family: 'DM Mono', monospace;
+    }
+
+    h2 {
+      font-size: 20px;
+      font-weight: 800;
+      margin-bottom: 10px;
+      letter-spacing: -0.3px;
+    }
+
+    p {
+      font-size: 14px;
+      line-height: 1.65;
+      color: #3a3530;
+      margin-bottom: 10px;
+    }
+    p:last-child { margin-bottom: 0; }
+
+    /* ── Grid demo ── */
+    .demo-grid {
+      display: grid;
+      gap: 3px;
+      width: 180px;
+      margin: 16px auto;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .demo-grid.g4 { grid-template-columns: repeat(4, 1fr); }
+    .dc {
+      aspect-ratio: 1;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      font-weight: 600;
+      color: white;
+    }
+    .dc.empty { background: #e8e2d8; }
+
+    /* ── Shape grid ── */
+    .shapes-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 12px;
+    }
+
+    .shape-card {
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .shape-card-name {
+      font-size: 13px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .shape-badge {
+      width: 10px; height: 10px;
+      border-radius: 2px;
+      flex-shrink: 0;
+    }
+
+    .shape-desc {
+      font-size: 12px;
+      color: var(--muted);
+      font-family: 'DM Mono', monospace;
+      line-height: 1.4;
+    }
+
+    .mini-grid {
+      display: grid;
+      gap: 2px;
+      width: fit-content;
+    }
+    .mini-grid span {
+      width: 14px; height: 14px;
+      border-radius: 2px;
+    }
+    .mini-grid span.on  { opacity: 1; }
+    .mini-grid span.off { background: #e8e2d8 !important; }
+
+    /* ── Steps ── */
+    .steps { display: flex; flex-direction: column; gap: 14px; margin-top: 4px; }
+
+    .step {
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+    }
+
+    .step-num {
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      background: var(--text);
+      color: var(--bg);
+      font-size: 13px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .step-body { font-size: 14px; line-height: 1.6; }
+    .step-body strong { font-weight: 700; }
+
+    /* ── Tips ── */
+    .tips { display: flex; flex-direction: column; gap: 10px; margin-top: 4px; }
+
+    .tip {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      font-size: 14px;
+      line-height: 1.55;
+    }
+
+    .tip-icon {
+      font-size: 18px;
+      flex-shrink: 0;
+      width: 24px;
+      text-align: center;
+      margin-top: 1px;
+    }
+
+    /* ── Footer ── */
+    footer {
+      width: 100%;
+      max-width: 600px;
+      margin-top: 32px;
+      text-align: center;
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      color: var(--muted);
+      line-height: 1.8;
+    }
+
+    footer a { color: var(--muted); }
+  </style>
+</head>
+<body>
+
+<header>
+  <a href="/" class="logo">
+    <div class="logo-icon">
+      <span></span><span></span><span></span><span></span>
+    </div>
+    <span class="logo-text">Patches</span>
+  </a>
+  <a href="/" class="play-link">▶ Play</a>
+</header>
+
+<div class="disclaimer">
+  <strong>Independent project</strong>
+  Patches is an independent puzzle game inspired by LinkedIn Games · Not affiliated with LinkedIn or Microsoft
+</div>
+
+<div class="content">
+
+  <!-- WHAT IS IT -->
+  <div class="card">
+    <div class="section-label">The game</div>
+    <h2>Fill the grid with rectangles</h2>
+    <p>Patches is a logic puzzle based on <strong>Shikaku</strong>. You start with a grid and a set of numbered clues — each clue marks a cell that must become part of a rectangle of exactly that size.</p>
+    <p>Your goal: divide the entire grid into non-overlapping rectangles, one per clue, until every cell is covered.</p>
+
+    <!-- demo: a solved 4×4 -->
+    <div class="demo-grid g4">
+      <div class="dc" style="background:var(--c1)">6</div>
+      <div class="dc" style="background:var(--c1)"></div>
+      <div class="dc" style="background:var(--c2)">4</div>
+      <div class="dc" style="background:var(--c2)"></div>
+      <div class="dc" style="background:var(--c1)"></div>
+      <div class="dc" style="background:var(--c1)"></div>
+      <div class="dc" style="background:var(--c2)"></div>
+      <div class="dc" style="background:var(--c2)"></div>
+      <div class="dc" style="background:var(--c1)"></div>
+      <div class="dc" style="background:var(--c1)"></div>
+      <div class="dc" style="background:var(--c3)">2</div>
+      <div class="dc" style="background:var(--c3)"></div>
+      <div class="dc" style="background:var(--c5)">4</div>
+      <div class="dc" style="background:var(--c5)"></div>
+      <div class="dc" style="background:var(--c5)"></div>
+      <div class="dc" style="background:var(--c5)"></div>
+    </div>
+  </div>
+
+  <!-- HOW TO PLAY -->
+  <div class="card">
+    <div class="section-label">How to play</div>
+    <h2>Drag to draw rectangles</h2>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body"><strong>Find a clue</strong> — each colored tile shows a number (and a shape hint). That number is how many cells the rectangle must cover.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body"><strong>Drag to define the rectangle</strong> — click anywhere and drag to draw a rectangle around the clue. The clue tile must end up inside it.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body"><strong>Cover every cell</strong> — rectangles cannot overlap. Keep placing until the whole grid is filled. The puzzle solves automatically when you're done.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">↩</div>
+        <div class="step-body"><strong>Made a mistake?</strong> Tap any painted region to erase it, or use Undo. Hint reveals one correct cell if you're stuck.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SHAPE TYPES -->
+  <div class="card">
+    <div class="section-label">Shape types</div>
+    <h2>What the icon inside the tile means</h2>
+    <p>Each clue tile shows a small icon indicating what shape its rectangle must be. Use this to narrow down the possibilities.</p>
+
+    <div class="shapes-grid">
+
+      <div class="shape-card">
+        <div class="shape-card-name">
+          <div class="shape-badge" style="background:var(--c1)"></div>
+          Square
+        </div>
+        <div class="mini-grid" style="grid-template-columns:1fr 1fr">
+          <span class="on" style="background:var(--c1)"></span>
+          <span class="on" style="background:var(--c1)"></span>
+          <span class="on" style="background:var(--c1)"></span>
+          <span class="on" style="background:var(--c1)"></span>
+        </div>
+        <div class="shape-desc">Width = height<br>e.g. 2×2, 3×3</div>
+      </div>
+
+      <div class="shape-card">
+        <div class="shape-card-name">
+          <div class="shape-badge" style="background:var(--c2)"></div>
+          Tall
+        </div>
+        <div class="mini-grid" style="grid-template-columns:1fr">
+          <span class="on" style="background:var(--c2)"></span>
+          <span class="on" style="background:var(--c2)"></span>
+          <span class="on" style="background:var(--c2)"></span>
+        </div>
+        <div class="shape-desc">Height &gt; width<br>e.g. 1×3, 2×4</div>
+      </div>
+
+      <div class="shape-card">
+        <div class="shape-card-name">
+          <div class="shape-badge" style="background:var(--c5)"></div>
+          Wide
+        </div>
+        <div class="mini-grid" style="grid-template-columns:1fr 1fr 1fr">
+          <span class="on" style="background:var(--c5)"></span>
+          <span class="on" style="background:var(--c5)"></span>
+          <span class="on" style="background:var(--c5)"></span>
+        </div>
+        <div class="shape-desc">Width &gt; height<br>e.g. 3×1, 4×2</div>
+      </div>
+
+      <div class="shape-card">
+        <div class="shape-card-name">
+          <div class="shape-badge" style="background:var(--c4)"></div>
+          Free
+        </div>
+        <div class="mini-grid" style="grid-template-columns:1fr">
+          <span class="on" style="background:var(--c4); border-radius:50%; width:14px; height:14px;"></span>
+        </div>
+        <div class="shape-desc">Any proportion<br>square, tall or wide</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- TIPS -->
+  <div class="card">
+    <div class="section-label">Strategy</div>
+    <h2>Tips for solving</h2>
+    <div class="tips">
+      <div class="tip">
+        <div class="tip-icon">🔢</div>
+        <div><strong>Start with the most constrained clues.</strong> A clue with size 2 can only form a 1×2 or 2×1 rectangle — very few options. A clue with a square icon has even fewer valid positions.</div>
+      </div>
+      <div class="tip">
+        <div class="tip-icon">🧩</div>
+        <div><strong>Work from the corners and edges.</strong> Cells near corners can only be reached by rectangles in one or two orientations, which limits possibilities fast.</div>
+      </div>
+      <div class="tip">
+        <div class="tip-icon">🚫</div>
+        <div><strong>Elimination.</strong> Once you place a rectangle, the cells it covers are gone. Use that to rule out positions for neighbouring clues.</div>
+      </div>
+      <div class="tip">
+        <div class="tip-icon">🔄</div>
+        <div><strong>Try, then undo.</strong> Tap a region to erase it if it blocks something else. There's no penalty for experimenting.</div>
+      </div>
+      <div class="tip">
+        <div class="tip-icon">💡</div>
+        <div><strong>Use Hint sparingly.</strong> Each hint reveals one correct cell. Save it for when you're completely stuck, not as a first resort.</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <a href="/">← Back to the game</a><br><br>
+  Patches is an independent project · Not affiliated with LinkedIn or Microsoft<br>
+  Inspired by the Shikaku logic puzzle
+</footer>
+
+</body>
+</html>
